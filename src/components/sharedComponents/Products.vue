@@ -1,12 +1,17 @@
 <template>
    <div>
-      <h2>{{shirt.title}}</h2>
+      <!-- <pre>{{shirt}}</pre> -->
+      <b>{{shirt.sys.id}}</b>
+      <h2>{{shirt.fields.title}}</h2>
+      <router-link :to="{path:`shirt/${shirt.sys.id}`, params: {id: shirt.sys.id }}" tag="a">Shirt</router-link>
       <vue-markdown>
-         {{shirt.bodyText}}
+         {{shirt.fields.bodyText}}
       </vue-markdown>
-      <img :src="shirt.productImage.fields.file.url" :alt="shirt.productImage.fields.title">
+      <img :src="shirt.fields.productImage.fields.file.url" :alt="shirt.fields.productImage.fields.title"/>
+
    </div>
 </template>
+
 
 <script>
 import VueMarkdown from 'vue-markdown'
@@ -16,7 +21,7 @@ export default {
    props: ['shirt'],
    components: {
       VueMarkdown
-   }
+   },
 }
 </script>
 

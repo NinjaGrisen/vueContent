@@ -26,30 +26,24 @@ export default {
   },
   methods: {
     getShirts() {
-        let test = [];
-        const vm = this;
+      const vm = this;
 
-        const contentful = require('contentful');
-        const client = contentful.createClient({
-          space: 'j0ouvu2ui9to',
-          accessToken: 'd5a77f0039560bd9b386c0505de1cd9dbc2b123184fe79beaca51bdde287ef76'
-        });
-        /*
-          Working
-        */
-          client.getEntries( {
-            'content_type': 'shirt'
-          }).then((response) => {
-            response.items.forEach(element => {
-              console.log(element.fields)
-              vm.shirts.push(element.fields)
-            });
+      const contentful = require('contentful');
+      const client = contentful.createClient({
+        space: 'j0ouvu2ui9to',
+        accessToken: 'd5a77f0039560bd9b386c0505de1cd9dbc2b123184fe79beaca51bdde287ef76'
+      });
+      
+      client.getEntries( {
+        'content_type': 'shirt'
+        })
+        .then((response) => {
+          response.items.forEach(element => {
+            console.log(element)
+            vm.shirts.push(element)
+            
           });
-
-        /* Images */
-        // client.getAssets()
-        // .then((response) => console.log(response.items))
-        // .catch(console.error)
+      });
     }
   }
 }
