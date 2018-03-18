@@ -41,9 +41,8 @@ export default {
           response.items.forEach(element => {
             console.log(element)
             vm.shirts.push(element)
-            
           });
-      });
+        });
     }
   }
 }

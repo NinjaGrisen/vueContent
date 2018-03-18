@@ -1,13 +1,10 @@
 <template>
   <div>
-     <h2>{{ shirt.title }}</h2>
-     <!-- <h2>{{shirt.fields.title}}</h2>
-      <img :src="shirt.fields.productImage.fields.file.url" :alt="shirt.fields.productImage.fields.title"/>
- -->
-     <vue-markdown>
-         {{shirt.bodyText}}
-      </vue-markdown>
-     
+    <vue-markdown v-if="shirt.bodyText[0]">
+      {{shirt.bodyText[0].bodyText}}
+    </vue-markdown>
+    <h2>{{ shirt.title }}</h2>
+    <img :src="shirt.imgUrl"/> 
   </div>
 </template>
 
@@ -18,17 +15,20 @@ export default {
    data() {
       return {
          shirt: {
-            title: '',
-            bodyText: '',
-            url: '',
-            imgTitle: ''
-         }
+            title: null,
+            bodyText: [],
+            url: null,
+            id: null,
+            imgUrl: null,
+            imgTitle: null
+         },
+         test: []
       }
    },
    components: {
       VueMarkdown
    },
-   created() {
+   beforeMount() {
     this.getEnity();
   },
    methods: {
@@ -41,11 +41,19 @@ export default {
          });
          
          client.getEntry(vm.$route.params.id)
-            .then(function (shirt) {
+          .then(function (shirt) {
             vm.shirt.title = shirt.fields.title;
-            vm.shirt.bodyText = shirt.fields.bodyText;
-            console.log(vm.shirt);
-        })
+            vm.shirt.bodyText.push(shirt.fields);
+            vm.shirt.id = shirt.fields.productImage.sys.id;
+
+          })
+          .then((res) => {
+            client.getAsset(vm.shirt.id)
+              .then((asset) => {
+                vm.shirt.imgUrl = asset.fields.file.url;
+              })
+              .catch(console.error)
+          });  
       }
    }
 }
