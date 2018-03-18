@@ -2,7 +2,7 @@
    <div>
       <b>{{shirt.sys.id}}</b>
       <h2>{{shirt.fields.title}}</h2>
-      <router-link :to="{path:`shirt/${shirt.sys.id}`, params: {id: shirt.sys.id }}" tag="a">Shirt</router-link>
+      <router-link :to="{path:`item/${shirt.sys.id}`, params: {id: shirt.sys.id }}" tag="a">Visa mer</router-link>
       <vue-markdown>
          {{shirt.fields.bodyText}}
       </vue-markdown>

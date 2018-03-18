@@ -21,8 +21,7 @@ export default {
             id: null,
             imgUrl: null,
             imgTitle: null
-         },
-         test: []
+         }
       }
    },
    components: {

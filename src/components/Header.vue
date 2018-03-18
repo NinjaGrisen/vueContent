@@ -8,8 +8,10 @@
 
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-         <router-link to="/shirts" activeClass="active" tag="li"><a>shirts</a></router-link>
-         <router-link to="/stocks" activeClass="active" tag="li"><a>Stocks</a></router-link>        
+        <router-link to="/shirts" activeClass="active" tag="li"><a>shirts</a></router-link>
+        <router-link to="/pants" activeClass="active" tag="li"><a>pants</a></router-link>  
+        <router-link to="/shoes" activeClass="active" tag="li"><a>shoes</a></router-link>  
+               
       </ul>
      
     </div>

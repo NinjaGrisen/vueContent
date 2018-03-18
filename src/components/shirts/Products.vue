@@ -18,9 +18,6 @@ export default {
   components: {
     appProduct: Product
   },
-  beforeCreated() {
-    console.log('beforeCreated')
-  },
   created() {
     this.getShirts();
   },
@@ -39,7 +36,6 @@ export default {
         })
         .then((response) => {
           response.items.forEach(element => {
-            console.log(element)
             vm.shirts.push(element)
           });
         });
