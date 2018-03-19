@@ -19,7 +19,17 @@
 </script>
 
 <style>
+    @import url('https://fonts.googleapis.com/css?family=Raleway:900');
+
+    *,
+    *:after,
+    *:before {
+        box-sizing: border-box;
+    }
+
     body {
-        padding: 30px;
+        min-height: 100vh;
+        background: #ebeae5;
+        margin: 0;
     }
 </style>
