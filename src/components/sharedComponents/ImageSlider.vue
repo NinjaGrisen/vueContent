@@ -5,7 +5,9 @@
             v-bind:style="{background: promotion.fields.promoBgColor, color: promotion.fields.promoBgColor }">
             
             <h2>{{promotion.fields.title}}</h2>
-            <img :src="promotion.fields.productImage.fields.file.url" :alt="promotion.fields.productImage.fields.title"/>
+            <div class="slider__image-bg"
+                  v-bind:style="{ 'background-image': 'url(' + promotion.fields.productImage.fields.file.url + ')' }"></div>
+            <!-- <img :src="promotion.fields.productImage.fields.file.url" :alt="promotion.fields.productImage.fields.title"/> -->
             <button @click="goTo(`item/${promotion.sys.id}`)">Visa produkt</button>
       </div>
 </template>
@@ -25,7 +27,7 @@ export default {
             window.location.replace(url);
       },
       mouseOut(e) {
-            this.$emit('changeTitle', '');
+            this.$emit('changeTitle', 'Populära skor');
             const promotions = e.target.parentElement.children;
             Array.from(promotions).forEach(function(item, id) {
 
@@ -84,6 +86,7 @@ export default {
       width: 25vw;
       overflow: hidden;
       padding: 12px;
+      height: calc(100vh - 400px);
       transition: all .25s ease;
    }
 
@@ -94,6 +97,13 @@ export default {
    .slider__image--bigger {
          width: 80vw;
          position: relative;
+   }
+
+   .slider__image-bg {
+      width: 60vw;
+      height: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
    }
 
    .slider__image--bigger:after {

@@ -4,9 +4,11 @@ import Vue2TouchEvents from 'vue2-touch-events'
 
 import App from './App.vue';
 import routes from './routes';
+import store from './store/store';
 
 Vue.use(VueRouter);
-Vue.use(Vue2TouchEvents)
+Vue.use(Vue2TouchEvents);
+
 
 
 const router = new VueRouter({
@@ -17,5 +19,6 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 });

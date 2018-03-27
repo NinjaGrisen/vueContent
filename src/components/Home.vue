@@ -3,55 +3,61 @@
     <div class="header__wrapper">
       <h1>{{title}}</h1>
     </div>
+    <pre>{{test}}</pre>
+    
+    <!-- 
+      fix pending in the future
+      <p>{{pendingState}}</p>
+    -->
     <div class="slider__wrapper">
-      <app-slider v-on:changeTitle="updateTitle($event)"
-        v-for="product in products" :key="product.id" :promotion="product"></app-slider>
+        <app-slider v-on:changeTitle="updateTitle($event)"
+          v-for="promotion in promotions" :key="promotion.id" :promotion="promotion"></app-slider>
     </div>
+
+    <app-product v-for="product in products" :key="product.id" :product="product"></app-product>
+    
   </div>
 </template>
 
 <script>
 import Slider from './sharedComponents/ImageSlider.vue';
+import Product from './sharedComponents/Products.vue';
 
 export default {
   data() {
     return {
-      products: [],
-      title: ''
+      title: 'Populära skor'
     }
   },
-
   components: {
-    appSlider: Slider
+    appSlider: Slider,
+    appProduct: Product
   },
   created() {
-    this.getProduct('product');
     this.getProduct('shirt');
     this.getProduct('pants');
+    this.promotionMutation('product');
   },
-  
+  computed: {
+    promotions() {
+      return this.$store.getters.getPromotions;
+    },
+    pendingState() {
+      console.log('fix pending in the future')
+    },
+    products() {
+      return this.$store.getters.getProducts;
+    }
+  },
   methods: {
-    updateTitle(e) {
-      this.title = e;
+    updateTitle(title) {
+      this.title = title;
+    },
+    promotionMutation(content_type) {
+      this.$store.commit('promotionMutation', {content_type, 'fields.promotion': true});
     },
     getProduct(content_type) {
-      const vm = this;
-
-      const contentful = require('contentful');
-      const client = contentful.createClient({
-        space: 'j0ouvu2ui9to',
-        accessToken: 'd5a77f0039560bd9b386c0505de1cd9dbc2b123184fe79beaca51bdde287ef76'
-      });
-      
-      client.getEntries( {
-        content_type,
-        'fields.promotion': 'true'
-        })
-        .then((response) => {
-          response.items.forEach(element => {
-            vm.products.push(element);
-          });
-        });
+      this.$store.commit('productMutation', {content_type, 'fields.priceInt[lte]': '400'});
     }
   }
 }
@@ -62,10 +68,12 @@ export default {
     position: absolute;
     right: 70px;
     font-size: 5rem;
-    top: -71px;
+    top: 0;
     font-family: 'Raleway', sans-serif;
-    color: #ebeae5;
-    text-shadow: 3px -1px 5px rgba(0,0,0,.2);
+    color: #f9f9f9;
+    width: 100%;
+    text-align: right;
+    text-shadow: 4px 4px 8px rgba(0,0,0,.1);
   }
   .header__wrapper {
     position: relative;
@@ -75,5 +83,6 @@ export default {
   .slider__wrapper {
     display: flex;
     flex-direction: row;
+    margin-top: 100px;
   }
 </style>

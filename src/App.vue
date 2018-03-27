@@ -10,6 +10,7 @@
 </template>
 
 <script>
+// https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/search-parameters/existence
     import Header from './components/Header.vue';
     export default {
         components: {
@@ -29,7 +30,7 @@
 
     body {
         min-height: 100vh;
-        background: #ebeae5;
         margin: 0;
+        background: #f9f9f9;
     }
 </style>

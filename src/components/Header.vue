@@ -14,6 +14,21 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+  nav {
+    height: 50px;
+    line-height: 50px;
+    padding-right: 15px;
+    text-align: right;
+  }
 
+  a {
+    margin-right: 15px;
+    color: black;
+  }
+
+  a.active {
+    color: white;
+  }
+  
 </style>

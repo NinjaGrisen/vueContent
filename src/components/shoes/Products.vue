@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>Shoes</h1>
-    <app-product v-for="shirt in shirts" :key="shirt.id" :shirt="shirt"></app-product>
+    <h1>Shoe</h1>
+    <app-product v-for="product in products" :key="product.id" :product="product"></app-product>
   </div>
 </template>
 
@@ -9,36 +9,22 @@
 import Product from '../sharedComponents/Products.vue';
 
 export default {
-  data() {
-    return {
-      shirts: []
-    }
-  },
-
   components: {
     appProduct: Product
   },
+  computed: {
+    products() {
+      console.log('Shoe')
+      return this.$store.getters.getProducts;
+    }
+  },
   created() {
-    this.getShirts();
+    this.getProducts('product');
   },
   methods: {
-    getShirts() {
-      const vm = this;
-
-      const contentful = require('contentful');
-      const client = contentful.createClient({
-        space: 'j0ouvu2ui9to',
-        accessToken: 'd5a77f0039560bd9b386c0505de1cd9dbc2b123184fe79beaca51bdde287ef76'
-      });
-      
-      client.getEntries( {
-        'content_type': 'product'
-        })
-        .then((response) => {
-          response.items.forEach(element => {
-            vm.shirts.push(element)
-          });
-        });
+    
+    getProducts(content_type) {
+      this.$store.commit('productMutation', {content_type});
     }
   }
 }
