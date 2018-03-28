@@ -13,15 +13,12 @@
         <app-slider v-on:changeTitle="updateTitle($event)"
           v-for="promotion in promotions" :key="promotion.id" :promotion="promotion"></app-slider>
     </div>
-
-    <app-product v-for="product in products" :key="product.id" :product="product"></app-product>
     
   </div>
 </template>
 
 <script>
 import Slider from './sharedComponents/ImageSlider.vue';
-import Product from './sharedComponents/Products.vue';
 
 export default {
   data() {
@@ -31,7 +28,6 @@ export default {
   },
   components: {
     appSlider: Slider,
-    appProduct: Product
   },
   created() {
     this.getProduct('shirt');
