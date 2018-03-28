@@ -1,13 +1,15 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Vue2TouchEvents from 'vue2-touch-events'
+import Vue2TouchEvents from 'vue2-touch-events';
 
 import App from './App.vue';
 import routes from './routes';
 import store from './store/store';
+import filter from './filter';
 
 Vue.use(VueRouter);
 Vue.use(Vue2TouchEvents);
+
 
 
 

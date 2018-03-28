@@ -16,10 +16,27 @@ export default new Vuex.Store( {
          getInfoAsyncPending: true,
          getInfoAsyncPromotionPending: true,
          getAsyncData: [],
-         getPromotionAsyncData: []
+         getPromotionAsyncData: [],
+         getSingleProduct: null,
+         getSingleProductImage: null,
+         getSingleProductRelatedProducts: [],
+         getSingleProductRelatedProductsImages: []
+      },
+      layout: {
+            sideMenu: false
       }
    },
    mutations: {
+      layoutMutation(state, payload) {
+            state.layout.sideMenu = false;
+            
+            if(payload) {
+                  state.layout.sideMenu = payload;
+            } else {
+                  state.layout.sideMenu = false;
+            }
+            console.log(payload, 'from store')
+      },
       promotionMutation(state, payload) {
          client.getEntries(payload)
             .then((response) => {
@@ -30,16 +47,49 @@ export default new Vuex.Store( {
             });
          });
       },
+      singleProductMutation(state, payload) {
+            let shirtId = null;
+            let relatedProducts = null;
+            let respons;
+            state.asyncInfo.getSingleProductImage = null;
+            client.getEntry(payload)
+                  .then(function (shirt) {
+                        state.asyncInfo.getSingleProduct = shirt
+                        shirtId = shirt.fields.productImage.sys.id;
+                        relatedProducts = shirt.fields.liknandeProdukter;
+                  })
+                  .then((res) => {
+                        client.getAsset(shirtId)
+                        .then((asset) => {
+                              state.asyncInfo.getSingleProductImage = null;
+                              state.asyncInfo.getSingleProductImage = asset.fields.file.url;
+                  })
+                  .then((res) => {
+                        for(let i = 0; i < relatedProducts.length; i++) {
+                              client.getEntry(relatedProducts[i].sys.id)
+                              .then((res) => {
+                                    respons = res;
+                                    state.asyncInfo.getSingleProductRelatedProducts.push(res)
+                              })
+                              .then((res) => {
+                                    console.log(respons.fields.productImage.sys.id)
+
+                                    client.getAsset(respons.fields.productImage.sys.id)
+                                    .then((res) => {
+                                          state.asyncInfo.getSingleProductRelatedProductsImages.push(res.fields.file.url)
+                                    })
+                              })
+
+                        }
+                  })
+                  .catch(console.error)
+            }); 
+
+      },
       productMutation(state, payload) {
          state.asyncInfo.getAsyncData = [];
 
-         let content_type = payload;
-         
-         if(Array.isArray(payload)) {
-            content_type = payload[0];
-         }
-
-         client.getEntries(content_type)
+         client.getEntries(payload)
             .then((response) => {
                state.asyncInfo.getInfoAsyncPending = false; 
                response.items.forEach(element => {
@@ -48,8 +98,21 @@ export default new Vuex.Store( {
          });
       }
    },
-   actions: {},
+   actions: {
+      promotionMutation(context, payload) {
+            context.commit('promotionMutation', payload)
+      },
+      productMutation(context, payload) {
+            context.commit('productMutation', payload)
+      },
+      singleProductMutation(context, payload) {
+            context.commit('singleProductMutation', payload)
+      }
+   },
    getters: {
+      getSidemenu(state) {
+            return state.layout.sideMenu;
+      },
       getPromotions(state) {
          return state.asyncInfo.getPromotionAsyncData;
       },
@@ -58,6 +121,18 @@ export default new Vuex.Store( {
       },
       getProducts(state) {
          return state.asyncInfo.getAsyncData;
+      },
+      getProduct(state) {
+            return state.asyncInfo.getSingleProduct;
+      },
+      getProductImage(state) {
+            return state.asyncInfo.getSingleProductImage;
+      },
+      getRelatedProducts(state) {
+            return state.asyncInfo.getSingleProductRelatedProducts;
+      },
+      getRelatedProductImage(state) {
+            return state.asyncInfo.getSingleProductRelatedProductsImages;
       }
    }
 })
