@@ -13,7 +13,7 @@
     </vue-markdown>
     <!-- <pre>{{relatedProductImages}}</pre>
     <pre v-if="relatedProducts[0].fields">{{relatedProducts[0].fields.title}}</pre> -->
-    <div class="cheap-products-wrapper">
+    <div class="cheap-products-wrapper" v-if="relatedProducts.length > 0">
       <div v-for="(product, index) in relatedProducts" :key="product.id" class="cheap-products-first" v-if="index == 0">
           <router-link :to="{path:`item/${product.sys.id}`, params: {id: product.sys.id }}" tag="div">
           <div class="cheap-products-first-text">

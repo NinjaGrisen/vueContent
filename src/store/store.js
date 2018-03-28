@@ -65,21 +65,23 @@ export default new Vuex.Store( {
                               state.asyncInfo.getSingleProductImage = asset.fields.file.url;
                   })
                   .then((res) => {
-                        for(let i = 0; i < relatedProducts.length; i++) {
-                              client.getEntry(relatedProducts[i].sys.id)
-                              .then((res) => {
-                                    respons = res;
-                                    state.asyncInfo.getSingleProductRelatedProducts.push(res)
-                              })
-                              .then((res) => {
-                                    console.log(respons.fields.productImage.sys.id)
-
-                                    client.getAsset(respons.fields.productImage.sys.id)
+                        if(relatedProducts) {
+                              for(let i = 0; i < relatedProducts.length; i++) {
+                                    client.getEntry(relatedProducts[i].sys.id)
                                     .then((res) => {
-                                          state.asyncInfo.getSingleProductRelatedProductsImages.push(res.fields.file.url)
+                                          respons = res;
+                                          state.asyncInfo.getSingleProductRelatedProducts.push(res)
                                     })
-                              })
+                                    .then((res) => {
+                                          console.log(respons.fields.productImage.sys.id)
 
+                                          client.getAsset(respons.fields.productImage.sys.id)
+                                          .then((res) => {
+                                                state.asyncInfo.getSingleProductRelatedProductsImages.push(res.fields.file.url)
+                                          })
+                                    })
+
+                              }
                         }
                   })
                   .catch(console.error)
