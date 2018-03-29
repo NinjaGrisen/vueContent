@@ -1,56 +1,38 @@
 <template>
   <div class="product-wrapper">
-    <div v-for="(product, index) in products" 
-      v-bind:class="{ 'product-main': index == 0 }"
-        :key="product.id"
-        v-if="index == 0"
-        v-bind:style="{'background-image': `url(${product.fields.productImage.fields.file.url})`}">
-        <router-link :to="{path:`item/${product.sys.id}`, params: {id: product.sys.id }}" tag="a">
-        <h2>{{product.fields.title}}
-          <span>{{product.fields.price | currency}}</span>
+    <div v-if="firstProduct" class="product-main" v-bind:style="{'background-image': `url(${firstProduct.fields.productImage.fields.file.url})`}">
+        <router-link :to="{path:`item/${firstProduct.sys.id}`, params: {id: firstProduct.sys.id }}" tag="a">
+        <h2>{{firstProduct.fields.title}}
+          <span>{{firstProduct.fields.price | currency}}</span>
         </h2>
         <span class="show-more">Show more</span>
         </router-link>
     </div>
-    <div class="cheap-products-wrapper">
-      <div v-for="(product, index) in products" :key="product.id" class="cheap-products-first" v-if="index == 1">
-          <router-link :to="{path:`./item/${product.sys.id}`, params: {id: product.sys.id }}" tag="div">
-          <div class="cheap-products-first-text">
-            <h2>{{product.fields.title}} {{product.id}}</h2>
-            
-          </div>
-          <div class="cheap-products-first-image" v-bind:style="{'background-image': `url(${product.fields.productImage.fields.file.url})`}"></div>
-          </router-link>
-      </div>
-      <div class="cheap-products-last-items">
-        <div v-for="(product, index) in products" :key="product.id" v-if="index > 1">
-            <router-link class="cheap-products" 
-              :to="{path:`./item/${product.sys.id}`, 
-              params: {id: product.sys.id }}" 
-              tag="div"
-              v-bind:class="{ 'cheap-products--last': index === 3 }">
-              <div class="cheap-products-last-items-text">
-                <h2>{{product.fields.title}} {{product.id}}</h2>
-                <span>Show more</span>
-              </div>
-              <div class="cheap-products-last-items--bg" v-bind:style="{'background-image': `url(${product.fields.productImage.fields.file.url})`}"></div>
-            </router-link>
-        </div>
-      </div>
-    </div>
+    <app-triss :products="products"></app-triss> 
   </div>
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from 'vue-markdown';
+import Triss from "./ThreeProducts.vue";
 
 export default {
   components: {
-      VueMarkdown
+      VueMarkdown,
+      appTriss: Triss
   },
   computed: {
     products() {
-      return this.$store.getters.getProducts;
+      let products = [];
+      for(var i = 0; i < this.$store.getters.getProducts.length; i++) {
+        if(i != 0) {
+          products.push(this.$store.getters.getProducts[i]);
+        }
+      }
+      return products;
+    },
+    firstProduct() {
+      return this.$store.getters.getProducts[0];
     }
   },
   created() {
@@ -90,11 +72,17 @@ export default {
 <style scoped>
 
 .product-wrapper {
-  width: calc(100vw - 259px);
+  width: calc(100% - 242px);
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+@media (max-width: 1040px) {
+    .product-wrapper {
+      width: 100%;
+    }
+  }
 
 .product-main {
   width: 100%;
@@ -143,87 +131,6 @@ export default {
 .product-main:hover a .show-more {
   padding-bottom: 0;
   border-bottom: 2px solid black;
-}
-
-.cheap-products-wrapper {
-  display: flex;
-  flex-direction: row;
-  width: 100vw;
-  max-width: 1240px;
-  margin: 66px auto;
-  cursor: pointer;
-  background: white;
-}
-
-.cheap-products-wrapper img {
-  width: 100%;
-}
-
-.cheap-products-last-items {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 300px;
-}
-
-.cheap-products-last-items-text {
-  flex-grow: 1;
-  text-align: center;
-}
-
-.cheap-products-last-items .cheap-products{
-  width: calc(100% - 24px);
-  margin: 12px;
-  background-color: #e2e2e2;
-  display: flex;
-  align-items: center;
-  min-height: 300px;
-}
-
-.cheap-products-last-items .cheap-products--last {
-  background-color: #f9dddd;
-  margin-top: 0;
-}
-
-.cheap-products-last-items .cheap-products:hover span  {
-  border-bottom: 2px solid black;
-}
-
-.cheap-products-last-items--bg {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 200px;
-  width: 50%;
-  width: 146px;
-  border: 12px solid white;
-  margin-right: 31px;
-      
-}
-
-.cheap-products-first {
-  max-width: calc(50% - 12px);
-  flex-grow: 1;
-  position: relative;
-  margin: 12px 0 12px 12px;
-}
-
-.cheap-products-first-text {
-    position: absolute;
-    width: calc(100% - 24px);
-    background: white;
-    text-align: center;
-    left: 12px;
-    bottom: 12px;
-}
-
-.cheap-products-first-image{
-  height: 612px;
-  background-size: cover;
-  background-color: #e2e2e2;
-}
-    
-    
-    
+} 
     
 </style>

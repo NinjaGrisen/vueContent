@@ -8,11 +8,10 @@
           <span>{{product.fields.price | currency}}</span>
         </h2>
     </div>
-    <vue-markdown>
+    <vue-markdown class="product-text">
       {{product.fields.bodyText}}
     </vue-markdown>
-    <!-- <pre>{{relatedProductImages}}</pre>
-    <pre v-if="relatedProducts[0].fields">{{relatedProducts[0].fields.title}}</pre> -->
+
     <div class="cheap-products-wrapper" v-if="relatedProducts.length > 0">
       <div v-for="(product, index) in relatedProducts" :key="product.id" class="cheap-products-first" v-if="index == 0">
           <router-link :to="{path:`item/${product.sys.id}`, params: {id: product.sys.id }}" tag="div">
@@ -44,11 +43,12 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from 'vue-markdown';
+
 
 export default {
   components: {
-      VueMarkdown
+    VueMarkdown
    },
   watch: {
     $route(to, from) {
@@ -67,6 +67,7 @@ export default {
       return this.$store.getters.getProductImage;
     },
     relatedProducts() {
+      console.log(this.$store.getters.getRelatedProducts)
       return this.$store.getters.getRelatedProducts;
     },
     relatedProductImages() {
@@ -88,10 +89,23 @@ export default {
 <style scoped>
 
 .product-wrapper-single {
-  width: calc(100vw - 242px);
+  width: calc(100% - 242px);
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  transition: all .25s ease;
+}
+
+@media (max-width: 1040px) {
+    .product-wrapper-single {
+      width: 100%;
+    }
+  }
+
+.product-text {
+  max-width: 810px;
+  width: 100%;
+  margin: 0 24px;
 }
 
 .product-main-single {
@@ -127,7 +141,7 @@ export default {
 .cheap-products-wrapper {
   display: flex;
   flex-direction: row;
-  width: 100vw;
+  width: 100%;
   max-width: 1240px;
   margin: 66px auto;
   cursor: pointer;
@@ -200,6 +214,31 @@ export default {
   height: 612px;
   background-color: #e2e2e2;
   background-size: cover;
+}
+
+
+@media (max-width: 760px) {
+  .cheap-products-wrapper {
+    flex-direction: column;
+    padding-bottom: 12px;
+  }
+  .cheap-products-first {
+    max-width: calc(100% - 24px);
+  }
+  .cheap-products-first-image {
+    height: 382px;
+    background-position: center;
+  }
+
+  .cheap-products-last-items {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .cheap-products-last-items .cheap-products {
+    margin-top: 0;
+
+  }
 }
 
 </style>

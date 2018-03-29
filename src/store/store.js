@@ -35,7 +35,7 @@ export default new Vuex.Store( {
             } else {
                   state.layout.sideMenu = false;
             }
-            console.log(payload, 'from store')
+            //console.log(payload, 'from store')
       },
       promotionMutation(state, payload) {
          client.getEntries(payload)
@@ -73,11 +73,14 @@ export default new Vuex.Store( {
                                           state.asyncInfo.getSingleProductRelatedProducts.push(res)
                                     })
                                     .then((res) => {
-                                          console.log(respons.fields.productImage.sys.id)
-
                                           client.getAsset(respons.fields.productImage.sys.id)
                                           .then((res) => {
+                                                state.asyncInfo.getSingleProductRelatedProducts[i].fields.productImage.fields = {};
+                                                state.asyncInfo.getSingleProductRelatedProducts[i].fields.productImage.fields.file = {};
+                                                state.asyncInfo.getSingleProductRelatedProducts[i].fields.productImage.fields.file.url = res.fields.file.url;
+                                                //state.asyncInfo.getSingleProductRelatedProducts[i].fields.productImage.fields.file.url = 'cat'
                                                 state.asyncInfo.getSingleProductRelatedProductsImages.push(res.fields.file.url)
+                                                console.log(state.asyncInfo.getSingleProductRelatedProducts);
                                           })
                                     })
 
